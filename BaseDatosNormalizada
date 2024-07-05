@@ -69,3 +69,5 @@ print("Productos:", c.fetchall())
 
 # Cerrar la conexión
 conn.close()
+
+participación Edgar MF

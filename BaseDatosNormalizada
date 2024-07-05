@@ -1,0 +1,71 @@
+import sqlite3
+
+# Conectar a una base de datos en memoria
+conn = sqlite3.connect(':memory:')
+c = conn.cursor()
+
+# Crear tablas en Primera Forma Normal
+c.execute('''CREATE TABLE Contactos (
+                ID INTEGER PRIMARY KEY,
+                Nombre TEXT NOT NULL,
+                Telefono TEXT NOT NULL
+            )''')
+c.execute('''CREATE TABLE Libros (
+                ID INTEGER PRIMARY KEY,
+                Titulo TEXT NOT NULL,
+                AutorID INTEGER,
+                FOREIGN KEY (AutorID) REFERENCES Autores(ID)
+            )''')
+c.execute('''CREATE TABLE Autores (
+                ID INTEGER PRIMARY KEY,
+                Nombre TEXT NOT NULL
+            )''')
+
+# Insertar datos en las tablas
+c.execute("INSERT INTO Contactos (Nombre, Telefono) VALUES ('Juan Perez', '555-1234')")
+c.execute("INSERT INTO Autores (Nombre) VALUES ('Gabriel Garcia Marquez')")
+c.execute("INSERT INTO Libros (Titulo, AutorID) VALUES ('Cien años de soledad', 1)")
+
+# Crear una tabla en Segunda Forma Normal
+c.execute('''CREATE TABLE Empleados (
+                ID INTEGER PRIMARY KEY,
+                Nombre TEXT NOT NULL,
+                Departamento TEXT NOT NULL,
+                Salario REAL NOT NULL
+            )''')
+
+# Insertar datos en la tabla
+c.execute("INSERT INTO Empleados (Nombre, Departamento, Salario) VALUES ('Ana Gomez', 'IT', 50000)")
+
+# Crear una tabla en Tercera Forma Normal
+c.execute('''CREATE TABLE Productos (
+                ID INTEGER PRIMARY KEY,
+                Nombre TEXT NOT NULL,
+                Precio REAL NOT NULL,
+                ProveedorID INTEGER,
+                FOREIGN KEY (ProveedorID) REFERENCES Proveedores(ID)
+            )''')
+c.execute('''CREATE TABLE Proveedores (
+                ID INTEGER PRIMARY KEY,
+                Nombre TEXT NOT NULL
+            )''')
+
+# Insertar datos en las tablas
+c.execute("INSERT INTO Proveedores (Nombre) VALUES ('Proveedor 1')")
+c.execute("INSERT INTO Productos (Nombre, Precio, ProveedorID) VALUES ('Producto A', 9.99, 1)")
+
+# Consultar datos
+c.execute("SELECT * FROM Contactos")
+print("Contactos:", c.fetchall())
+
+c.execute("SELECT * FROM Libros")
+print("Libros:", c.fetchall())
+
+c.execute("SELECT * FROM Empleados")
+print("Empleados:", c.fetchall())
+
+c.execute("SELECT * FROM Productos")
+print("Productos:", c.fetchall())
+
+# Cerrar la conexión
+conn.close()
